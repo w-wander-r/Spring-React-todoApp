@@ -2,26 +2,33 @@ package SpringReactTodoApp.service;
 
 import java.util.List;
 
-import SpringReactTodoApp.model.Todo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import SpringReactTodoApp.model.Todo;
+import SpringReactTodoApp.repository.TodoRepository;
+
+@Service
 public class TodoServiceImpl implements TodoService{
+
+    @Autowired
+    private TodoRepository todoRepository;
 
     @Override
     public List<Todo> getAllTodos() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllTodos'");
+        return todoRepository.findAll();
     }
 
     @Override
     public Todo createTodo(Todo todo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createTodo'");
+        return todoRepository.save(todo);
     }
 
     @Override
-    public void deleteTodo(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteTodo'");
+    public void deleteTodo(Long id) throws Exception {
+        Todo todo = todoRepository.findById(id).orElseThrow(()->new Exception("Todo with this id do not exist"));
+
+        todoRepository.delete(todo);
     }
     
 }

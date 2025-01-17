@@ -10,5 +10,5 @@ public interface TodoService {
 
     Todo createTodo(Todo todo);
 
-    void deleteTodo(Long id);
+    void deleteTodo(Long id) throws Exception;
 }
