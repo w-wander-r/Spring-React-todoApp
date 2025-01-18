@@ -1,15 +1,49 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+
+const api = "http://localhost:8080/api/todos"
 
 export const Home = () => {
-  return (
+    const [title,setTitle] = useState();
+    const [todos, setTodos] = useState([]);
+
+    const createTodo = async () => {
+        const todo = {title}
+
+        try {
+            const {data} = await axios.post(`${api}`, todo)
+            setTodos([...todos, data])
+            console.log(data)
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
+    useEffect(()=>{
+        fetchAllTodos();
+    }, [])
+
+    const fetchAllTodos = async () => {
+
+        try {
+            const {data} = await axios.get(`${api}`)
+            setTodos(data)
+            console.log("all todos", data)
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
+    return (
     <div className="w-[50vw] h-[80vh] bg-white rounded-xl ">
       <div className="bg-[#758AA2] p-5 flex gap-5 justify-center rounded-t-xl">
         <input
           className="p-2 rounded-md w-full outline-none px-5 text-black"
           placeholder="Add New Task"
           type="text"
+          onChange={(e)=>setTitle(e.target.value)}
         />
-        <button className="py-2 px-5 rounded-md bg-[#2B2B52]">Add</button>
+        <button onClick={createTodo} className="py-2 px-5 rounded-md bg-[#2B2B52]">Add</button>
       </div>
       <h1 className="text-black text-center pt-10 font-bold">List Of Todo</h1>
       <div className="p-5 space-y-2 overflow-y-auto h-[60vh]">
