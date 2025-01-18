@@ -24,10 +24,19 @@ export const Home = () => {
     }, [])
 
     const fetchAllTodos = async () => {
-
         try {
             const {data} = await axios.get(`${api}`)
             setTodos(data)
+            console.log("all todos", data)
+        } catch (error) {
+            console.log("error: ", error)
+        }
+    }
+
+    const deleteTodo = async (id) => {
+        try {
+            const {data} = await axios.delete(`${api}/${id}`)
+            setTodos(todos.filter(todo=>todo.id !== id))
             console.log("all todos", data)
         } catch (error) {
             console.log("error: ", error)
@@ -47,17 +56,18 @@ export const Home = () => {
       </div>
       <h1 className="text-black text-center pt-10 font-bold">List Of Todo</h1>
       <div className="p-5 space-y-2 overflow-y-auto h-[60vh]">
-        {new Array(5).fill(0).map((item, index) => (
+        {todos.map((item, index) => (
           <div className="bg-[#99AAAB] p-3 rounded-md flex items-center justify-between">
             <div class="">
               <p class="text-gray-900 text-sm">
-                {index + 1}. todo{index + 1}.
+                {index + 1}. {item.title}
               </p>
             </div>
             <div class="flex space-x-4">
               <button
                 class="text-red-600 hover:text-white focus:outline-none rounded-full hover:bg-red-600 p-2"
                 aria-label="Delete"
+                onClick={()=>deleteTodo(item.id)}
               >
                 <svg
                   class="h-6 w-6"
